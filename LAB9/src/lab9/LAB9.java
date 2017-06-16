@@ -18,7 +18,7 @@ public class LAB9 {
      */
     public static void main(String[] args) {
         Generador<Llamada> g = new Generador(new Llamada());
-        g.ListModelCreator("listLlamada", "Tabla");
+        //g.ListModelCreator("listLlamada", "Tabla");
         new Frame().setVisible(true);
     }
 

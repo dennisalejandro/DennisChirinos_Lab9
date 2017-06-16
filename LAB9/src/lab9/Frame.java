@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -26,11 +28,14 @@ public class Frame extends javax.swing.JFrame {
      */
     ArrayList<Contacto> listContacto = new ArrayList();
     ArrayList<Mensaje> listMensaje = new ArrayList();
-    ArrayList<Thread> listLlamada = new ArrayList();
+    ArrayList<Hilo_Llam> listThread = new ArrayList();
+    ArrayList<Llamada> listLlamadas = new ArrayList();
     SaveData SD = new SaveData();
     int gI = 0;
-
+    
     public Frame() {
+        //HiloTabla HT = new HiloTabla(Tabla, listThread);
+        //HT.start();
         initComponents();
     }
 
@@ -74,6 +79,7 @@ public class Frame extends javax.swing.JFrame {
         jScrollPane5 = new javax.swing.JScrollPane();
         JD3_JL_Contactos = new javax.swing.JList<>();
         jButton8 = new javax.swing.JButton();
+        jButton9 = new javax.swing.JButton();
         jDialog4 = new javax.swing.JDialog();
         jPanel2 = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
@@ -329,6 +335,13 @@ public class Frame extends javax.swing.JFrame {
             }
         });
 
+        jButton9.setText("Colgar");
+        jButton9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton9ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jDialog3Layout = new javax.swing.GroupLayout(jDialog3.getContentPane());
         jDialog3.getContentPane().setLayout(jDialog3Layout);
         jDialog3Layout.setHorizontalGroup(
@@ -337,7 +350,9 @@ public class Frame extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton8, javax.swing.GroupLayout.DEFAULT_SIZE, 105, Short.MAX_VALUE)
+                .addGroup(jDialog3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton8, javax.swing.GroupLayout.DEFAULT_SIZE, 105, Short.MAX_VALUE)
+                    .addComponent(jButton9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jDialog3Layout.setVerticalGroup(
@@ -347,6 +362,8 @@ public class Frame extends javax.swing.JFrame {
                 .addGroup(jDialog3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jDialog3Layout.createSequentialGroup()
                         .addComponent(jButton8)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton9)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 278, Short.MAX_VALUE))
                 .addContainerGap())
@@ -505,6 +522,11 @@ public class Frame extends javax.swing.JFrame {
         jLabel7.setText(" ^        ᴥ        ^");
 
         jMenu1.setText("Contactos");
+        jMenu1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenu1ActionPerformed(evt);
+            }
+        });
 
         jMenuItem1.setText("Manejar Contactos");
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
@@ -834,33 +856,41 @@ public class Frame extends javax.swing.JFrame {
     }//GEN-LAST:event_JD1_CB_ContactosMouseClicked
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
-        Llamada c = new Llamada();
-        c.Emisor = "Yo";
+        Hilo_Llam c = new Hilo_Llam();
         c.Receptor = listContacto.get(JD3_JL_Contactos.getSelectedIndex()).Nombre;
-        listLlamada.add(new Thread(c));
-        listLlamada.get(gI).start();
+        listThread.add(c);
+        listThread.get(gI).start();
         gI++;
-        c.setVisible(true);
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
         DefaultTableModel model = new DefaultTableModel();
         model.addColumn("Tiempo");
-        model.addColumn("Colgado");
         model.addColumn("Emisor");
         model.addColumn("Receptor");
-        model.addColumn("jButton1");
-        model.addColumn("jLabel1");
-        model.addColumn("jLabel2");
-        if (listLlamada.size() >= 0) {
+        if (listThread.size() >= 0) {
             Object[] o = new Object[model.getColumnCount()];
-            for (int i = 0; i < listLlamada.size(); i++) {
-
+            for (int i = 0; i < listThread.size(); i++) {
+                o[0] = listThread.get(i).Tiempo;
+                o[1] = listThread.get(i).Emisor;
+                o[2] = listThread.get(i).Receptor;
                 model.addRow(o);
             }
         }
         Tabla.setModel(model);
+        jDialog6.pack();
+        jDialog6.setVisible(true);
     }//GEN-LAST:event_jMenuItem4ActionPerformed
+
+    private void jMenu1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenu1ActionPerformed
+
+    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
+        for (int i = 0; i < listThread.size(); i++) {
+            listThread.get(i).Colgado = false;
+        }
+    }//GEN-LAST:event_jButton9ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -896,7 +926,7 @@ public class Frame extends javax.swing.JFrame {
             }
         });
     }
-
+    
     public Contacto CrearContacto(int Serie) {
         String Nombre = JD1_TF_Nombre.getText();
         int Edad = (int) JD1_SP_Edad.getValue();
@@ -914,14 +944,14 @@ public class Frame extends javax.swing.JFrame {
         Contacto c = new Contacto(Nombre, Edad, Numero, Correo, Direccion, Genero);
         return c;
     }
-
+    
     public void actualizar() {
         JD1_CB_Contactos.removeAllItems();
         for (int i = 0; i < listContacto.size(); i++) {
             JD1_CB_Contactos.addItem(listContacto.get(i).getNombre());
         }
     }
-
+    
     public Mensaje CrearMensaje(int Serie) {
         String Emisor = "Usuario";
         String Receptor = listContacto.get(JD4_CB_Contactos.getSelectedIndex()).getNombre();
@@ -954,6 +984,7 @@ public class Frame extends javax.swing.JFrame {
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
+    private javax.swing.JButton jButton9;
     private javax.swing.JDialog jDialog1;
     private javax.swing.JDialog jDialog2;
     private javax.swing.JDialog jDialog3;
