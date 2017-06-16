@@ -32,7 +32,7 @@ public class Frame extends javax.swing.JFrame {
     ArrayList<Llamada> listLlamadas = new ArrayList();
     SaveData SD = new SaveData();
     int gI = 0;
-    
+
     public Frame() {
         //HiloTabla HT = new HiloTabla(Tabla, listThread);
         //HT.start();
@@ -97,6 +97,8 @@ public class Frame extends javax.swing.JFrame {
         jDialog6 = new javax.swing.JDialog();
         jScrollPane6 = new javax.swing.JScrollPane();
         Tabla = new javax.swing.JTable();
+        jDialog7 = new javax.swing.JDialog();
+        JL_Tiempo = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
@@ -517,6 +519,23 @@ public class Frame extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        javax.swing.GroupLayout jDialog7Layout = new javax.swing.GroupLayout(jDialog7.getContentPane());
+        jDialog7.getContentPane().setLayout(jDialog7Layout);
+        jDialog7Layout.setHorizontalGroup(
+            jDialog7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jDialog7Layout.createSequentialGroup()
+                .addContainerGap(79, Short.MAX_VALUE)
+                .addComponent(JL_Tiempo, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+        jDialog7Layout.setVerticalGroup(
+            jDialog7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jDialog7Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(JL_Tiempo, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(59, Short.MAX_VALUE))
+        );
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel7.setText(" ^        ᴥ        ^");
@@ -856,7 +875,9 @@ public class Frame extends javax.swing.JFrame {
     }//GEN-LAST:event_JD1_CB_ContactosMouseClicked
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
-        Hilo_Llam c = new Hilo_Llam();
+        Hilo_Llam c = new Hilo_Llam("yo", JL_Tiempo);
+        jDialog7.pack();
+        jDialog7.setVisible(true);
         c.Receptor = listContacto.get(JD3_JL_Contactos.getSelectedIndex()).Nombre;
         listThread.add(c);
         listThread.get(gI).start();
@@ -926,7 +947,7 @@ public class Frame extends javax.swing.JFrame {
             }
         });
     }
-    
+
     public Contacto CrearContacto(int Serie) {
         String Nombre = JD1_TF_Nombre.getText();
         int Edad = (int) JD1_SP_Edad.getValue();
@@ -944,14 +965,14 @@ public class Frame extends javax.swing.JFrame {
         Contacto c = new Contacto(Nombre, Edad, Numero, Correo, Direccion, Genero);
         return c;
     }
-    
+
     public void actualizar() {
         JD1_CB_Contactos.removeAllItems();
         for (int i = 0; i < listContacto.size(); i++) {
             JD1_CB_Contactos.addItem(listContacto.get(i).getNombre());
         }
     }
-    
+
     public Mensaje CrearMensaje(int Serie) {
         String Emisor = "Usuario";
         String Receptor = listContacto.get(JD4_CB_Contactos.getSelectedIndex()).getNombre();
@@ -974,6 +995,7 @@ public class Frame extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> JD4_CB_Contactos;
     private javax.swing.JTextArea JD4_TA_Mensaje;
     private javax.swing.JComboBox<String> JD5_CB_Contactos;
+    private javax.swing.JLabel JL_Tiempo;
     private javax.swing.JButton OKBUTTON;
     private javax.swing.JTable Tabla;
     private javax.swing.JButton jButton1;
@@ -991,6 +1013,7 @@ public class Frame extends javax.swing.JFrame {
     private javax.swing.JDialog jDialog4;
     private javax.swing.JDialog jDialog5;
     private javax.swing.JDialog jDialog6;
+    private javax.swing.JDialog jDialog7;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;

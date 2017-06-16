@@ -5,6 +5,7 @@
  */
 package lab9;
 
+import javax.swing.JLabel;
 import static lab9.Llamada.Tiempo;
 
 /**
@@ -17,6 +18,12 @@ public class Hilo_Llam extends Thread {
     boolean Colgado = true;
     String Emisor;
     String Receptor;
+    JLabel label;
+
+    public Hilo_Llam(String Receptor, JLabel label) {
+        this.Receptor = Receptor;
+        this.label = label;
+    }
 
     @Override
     public void run() {
@@ -27,6 +34,7 @@ public class Hilo_Llam extends Thread {
             } catch (InterruptedException ex) {
 
             }
+            label.setText(Tiempo + "");
             Tiempo++;
 
         }
